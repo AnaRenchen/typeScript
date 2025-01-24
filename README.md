@@ -37,3 +37,8 @@ Cuando decimos unknow estamos diciendo que no sabemos cuál es el tipo.
 
 La inferencia de TS tiene un límite: ejemplo, funciones.
 Además de los parámetros, también se puede indicar lo que devuelve. TS tiene inferencia del tipo que devuelve.
+
+Type Alias: una de las cosas más potentes que tiene TS.
+Se crea un type propio para definir como es algo.
+
+Template Union Type
