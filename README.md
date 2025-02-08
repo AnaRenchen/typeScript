@@ -1,6 +1,6 @@
 # typeScript
 
-Es JS con una sintasis para tipos. Añade tipos estáticos para JS. NO es un lenguaje de programación separado.
+Es JS con una sintasis para tipos. Añade tipos estáticos para JS. No es un lenguaje de programación separado.
 No funciona en tiempo de ejecución. Lo que llega directamente al navegador es JS. Ejemplo:
 const name = "Ana" - const name es typestript y Ana es JS
 El typescript se compila y se convierte a JS.

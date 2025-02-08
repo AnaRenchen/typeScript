@@ -39,8 +39,7 @@ popi({ name: "Popi", age: 23 });
 
 //Function as el "any" de las funciones, por lo que también deberíamos evitarlo. Es más correcto decir
 //sayHiFromFunction recibe como parámetro la función greet
-
-const sayHiFromFunction = (fn: (name: string) => void) => {
+const sayHiFromFunction = (fn: (mingzi: string) => void) => {
   //void porque no devuelve nada. Si pongo string se queja. Para que no se queje con string tengo que poner en greet return mingzi. Void lo que indica es que no te importa lo que devuelva y que no tiene que devolver nada.
   fn("Miguel");
 };
@@ -86,7 +85,7 @@ let hero: Hero = {
 function createHero(name: string, age: number): Hero {
   return { name, age };
 }
-//acá ya se dice que thor es del tipo Hero
+//acá ya se dice que thor es del tipo Hero, al hacer uso de la función
 const thor = createHero("thor", 34);
 
 //también puedo poner el parámetro así, con el objeto y su tipo
@@ -98,11 +97,10 @@ function createHero2(hero: Hero): Hero {
 //si paso entonces el objeto como parámetro entonces acá tengo que cambiar a objeto también al momento de llamar la función
 const thor2 = createHero2({ name: "thor", age: 34 });
 
-//Template Union Type
 //Creación de un tipo para usar adentro de otros tipos
-type HeroId = `${string}-${string}-${string}-${string}-${string}`;
-
+type HeroId = `${string}-${string}-${string}-${string}-${string}`; //Template Union Type: es la forma que va a tener este id
 type HeroPowerScale = "galactico" | "fuerte";
+
 //Optional Properties
 type Hero2 = {
   readonly id?: HeroId; //propiedad solo de lectura para evitar que sea cambiada y el tipo que se asignó para el Id. No hace que el código sea inmutable, ya que funciona solo cuando se está escribiendo el código, no en su ejecución. Solo avisa que no se puede hacer algo. Para que sea inmutable tendría que usar JS como, por ejemplo Object.freeze
@@ -126,14 +124,12 @@ thor3.id?.toString(); //acá se agregó automaticamente el ? porque es una forma
 thor3.PowerScale = "sss";
 
 //Otro ejemplo del type union template
-
 type HexaDecimalColor = `#${string}`;
 
 let color: HexaDecimalColor = `333333`; //acá se queja pq no tiene el # que defini en el tipo
 let color2: HexaDecimalColor = `#333333`;
 
 //Como acá dije que ann puede ser un number o un string, no se queja. Es como una unión de tipos. Es como el joint de sql
-
 let ann: number | string;
 
 ann = "a";
@@ -155,8 +151,7 @@ type HeroProperties = {
 //Se crea un nuevo tipo que junta los dos
 type Hero3 = HeroBasicInfo & HeroProperties;
 
-//Type Indexing
-
+//Type Indexing: es extraer un tipo
 type HeroProperties2 = {
   isActive: boolean;
   address: {
@@ -166,13 +161,14 @@ type HeroProperties2 = {
 };
 
 //...se puede acceder al tipo que está arriba en el objeto. En el caso de address, como es un objeto con planet y city, si solo escribo planet se queja, tengo que escribir los dos. Permite reutilizar partes de un tipo que tengamos
+
+//addressHero es el mismo que el tipo de la propiedad address dentro del tipo HeroProperties2. En otras palabras, addressHero será un objeto que tiene las mismas propiedades que address. Eso es lo que quiere decir HeroProperties2[]
 const addressHero: HeroProperties2["address"] = {
   planet: "Earth",
   city: "Madrid",
 };
 
 //Type from value
-
 const address = {
   planet: "earth",
   city: "madrid",
@@ -197,14 +193,13 @@ function createAddress() {
 //el tipo de este address se recupera de lo que devuelve la función createAddress. Se guarda el return de la función arriba en Address2
 type Address2 = ReturnType<typeof createAddress>;
 
-//Arrays
-//Hay que tipar el array para que TS no piense que debe estar vacío
+//Arrays: hay que tipar el array para que TS no piense que debe estar vacío
 
 const languages = [];
 
 languages.push("inglés");
 
-const languages2: (string | number)[] = []; //en language vamos a tener un array de strings o de number(si quiero puedo elegir uno o otro así string[]=[]). también se puede escribir así. Array<string>
+const languages2: (string | number)[] = []; //en language vamos a tener un array de strings o de number(si quiero puedo elegir uno u otro así string[]=[]). también se puede escribir así. Array<string>
 
 languages2.push("inglés");
 languages2.push(2);
@@ -213,17 +208,44 @@ console.log(languages2);
 
 const heroBasicInfo: HeroBasicInfo[] = []; //acá estoy diciendo que el array será del tipo HeroBasicInfo que cree arriba
 
-//Una tupla es un array que tiene un límite fijado de longitud.
+//Una tupla es un array que tiene un límite fijado de longitud, es decir, son arrays con un tamaño fijo
 type CellValue = "X" | "Y" | "";
-type GameBoard = [
+type GameBoard = readonly [
+  //acá se pone el readonly pq hay un problema en las tuplas que permite determinados cambios
   [CellValue, CellValue, CellValue],
   [CellValue, CellValue, CellValue],
   [CellValue, CellValue, CellValue]
 ];
 
 //Acá si intento poner algo distinto del CellValue o del GameBoard se queja
+//String[][] para tiparlo, ya que es un array de un array de strings
 const gameBoard: GameBoard = [
   ["X", "", ""],
   ["", "", ""],
   ["", "", ""],
 ];
+
+//Enuns: enumeraciones
+//Según como lo hagas pueden compilarse a código JS o no
+// Funciona para datos finitos, que uno conoce y que puede controlar
+// Así como está el código será traspilado y JS les otorgará un número para cada uno. Para que eso no pase tendría que poner adelante de enum que es una constante. Si no quiero que se numere automaticamente tengo que poner el tipo:
+//La forma const antes de enum genera menos código, pero si se hace algo para que sea consumido desde afuera es recomendable no usarla para que se pueda ver el tipo
+
+enum ERROR_TYPES {
+  NOT_FOUND = "no se encuentra",
+  UNAUTHORIZED = "no autorizado",
+  FORBIDEN = "no podes pasar",
+}
+
+function mostrarMensaje(tipoDeError: ERROR_TYPES) {
+  //se utiliza el enum acá como un tipo
+  if ((tipoDeError = ERROR_TYPES.NOT_FOUND)) {
+    console.log("hola");
+  } else if ((tipoDeError = ERROR_TYPES.FORBIDEN)) {
+    console.log("hello");
+  } else if ((tipoDeError = ERROR_TYPES.UNAUTHORIZED)) {
+    console.log("que tal");
+  }
+}
+
+//Aserciones de tipos
