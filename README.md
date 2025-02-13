@@ -42,3 +42,5 @@ Type Alias: una de las cosas más potentes que tiene TS.
 Se crea un type propio para definir como es algo.
 
 Template Union Type
+
+Enuns: para colección de datos finita, como, por ejemplo, enumerar los días de la semana.

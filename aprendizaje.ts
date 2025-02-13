@@ -227,11 +227,12 @@ const gameBoard: GameBoard = [
 
 //Enuns: enumeraciones
 //Según como lo hagas pueden compilarse a código JS o no
-// Funciona para datos finitos, que uno conoce y que puede controlar
+// Funciona para datos finitos, que uno conoce y que puede controlar, como los días de la semana
 // Así como está el código será traspilado y JS les otorgará un número para cada uno. Para que eso no pase tendría que poner adelante de enum que es una constante. Si no quiero que se numere automaticamente tengo que poner el tipo:
-//La forma const antes de enum genera menos código, pero si se hace algo para que sea consumido desde afuera es recomendable no usarla para que se pueda ver el tipo
-
-enum ERROR_TYPES {
+//La forma const antes de enum genera menos código, pero si se hace algo para que sea consumido desde afuera, como un componente, biblioteca o librería, es recomendable no usarla para que se pueda ver el tipo
+//Al utilizar enuns JS otorga a cada uno un índice entonces not found sería 0, unauthorized sería 1, etc. Eso es transpilado en el código JS. Si agrego const antes de enuns entonces no hace eso y paso a tener menos código.
+//Ahora si no quiero que JS otorgue esos índices porque, por ejemplo, no quiero que empiece por el 0 porque ya tiene un id, entonces defino el valor de las claves como en el ejemplo abajo (de lo contrario estaría solo not_found sin el =)
+const enum ERROR_TYPES {
   NOT_FOUND = "no se encuentra",
   UNAUTHORIZED = "no autorizado",
   FORBIDEN = "no podes pasar",
