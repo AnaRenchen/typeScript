@@ -44,3 +44,7 @@ Se crea un type propio para definir como es algo.
 Template Union Type
 
 Enuns: para colección de datos finita, como, por ejemplo, enumerar los días de la semana.
+
+Qué es mejor usar, tipo o interface? Eso depende.
+Con las interfaces siempre estás hablando de un objeto, por lo que no se puede usar la interface para crear un tipo primitivo como los colores.
+Aun así, si hay que elegir, es mejor utilizar tipos. Pero si lo que se va a utilizar son clases o objetos, en determinadas situaciones es preferible usar interface.

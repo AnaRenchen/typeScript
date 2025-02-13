@@ -250,3 +250,141 @@ function mostrarMensaje(tipoDeError: ERROR_TYPES) {
 }
 
 //Aserciones de tipos
+
+//acá es imposible para TS saber que lo que se quiere recuperar es un canvas, porque no funciona en tiempo de ejecución. Entonces hay que indicarle lo que se quiere recuperar
+const canvas = document.getElementById("canvas");
+//devuelve null si no lo encuentra o un genérico HTMLElement si lo encuentra. Cómo sabe TS que lo que queremos recuperar es un elemento <canvas/>?
+const canvas2 = document.getElementById("canvas") as HTMLCanvasElement; //tengo que especificar que lo trate como un canvas element, pero al hacer eso ya no está la posibilidad de que devuelva null. Entonces hay que hacer lo siguiente:
+
+//ahora por inferencia TS se da cuenta que adentro del if ya solo el canvas va a poder ser un HTMLCanvasElement
+if (canvas instanceof HTMLCanvasElement) {
+  //y acá JS está ejecutando el código de la condición
+  const ctx = canvas.getContext("2d");
+}
+
+//Fetching de datos en TS : ver otro archivo
+
+//Interfaces
+//estamos diciendo qué forma deberá tener el objeto. En la mayoría de las veces es intercambiable con los tipos. dice cómo es la forma del objeto, pero no el objeto en si
+
+interface Hero4 {
+  name: string;
+  country: string;
+  age: number;
+}
+
+const hero1: Hero4 = {
+  name: "Spiderman",
+  country: "EUA",
+  age: 34,
+};
+
+//Las interfaces también pueden estar anidadas, es decir, usar una interface adentro de una interface
+interface Producto {
+  name: string;
+  cantidad: number;
+  precio: number;
+}
+
+interface Carrito {
+  totalPrice: number;
+  productos: (Producto | Zapatilla)[];
+}
+
+const carrito: Carrito = {
+  totalPrice: 100,
+  productos: [
+    {
+      name: "esponja",
+      cantidad: 2,
+      precio: 5,
+    },
+  ],
+};
+
+//Una interface puede extenderse de otra.Los tipos también, pero no de esta manera. Los tipos se pueden unir
+
+interface Zapatilla extends Producto {
+  talle: number; //además de tener todo lo que tiene producto va a tener una propiedad llamada talle
+}
+
+//Definir operaciones
+interface CarritoOps {
+  add: (product: Producto) => void;
+  clear: () => void;
+}
+
+//se puede utilizar la misma interface dos veces, lo que hace es extender automaticamente. Pero eso no pasa con los tipos
+//Todas las interfaces desaparecen cuando se compila a JS
+
+interface CarritoOps {
+  add: (product: Producto) => void;
+  clear: () => void;
+}
+
+interface CarritoOps {
+  remove: (id: number) => void;
+}
+
+//Narrowing
+//Hacer como un embudo, que es ir perdiendo los tipos que no podés usar en determinado punto
+
+function mostrarLongitud(objeto: string | number) {
+  //eso pq no se puede tener length de un number
+  if (typeof objeto === "string") {
+    return objeto.length;
+  }
+  return objeto.toString().length;
+}
+
+mostrarLongitud("1");
+
+interface Mario {
+  company: "Nintendo";
+  nombre: string;
+  saltar: () => void;
+}
+
+interface Sonic {
+  company: "Sega";
+  nombre: string;
+  correr: () => void;
+}
+
+type Personaje = Sonic | Mario;
+
+function jugar(personaje: Personaje) {
+  if (personaje.company === "Nintendo") {
+    personaje.saltar(); //acá ya sabe que seguro es mario, por el if
+    return;
+  }
+  personaje.correr; //acá ya sabe que seguro es sonic
+}
+
+//otra manera de hacer lo de arriba, con type guard
+
+interface Mario1 {
+  nombre: string;
+  saltar: () => void;
+}
+
+interface Sonic1 {
+  nombre: string;
+  correr: () => void;
+}
+
+type Personaje1 = Sonic1 | Mario1;
+
+//type guard: HAY QUE EVITARLO Y SE USA DE LA MANERA ABAJO. Deja el código más verboso y se necesitan muchas comprobaciones
+//dejame comprobar si eso es Mario
+//y esta función determina si es Mario o no
+function checkIsMario(personaje: Personaje1): personaje is Mario {
+  return (personaje as Mario).saltar != undefined;
+}
+
+function jugar1(personaje: Personaje1) {
+  if (checkIsMario(personaje)) {
+    personaje.saltar();
+    return;
+  }
+}
