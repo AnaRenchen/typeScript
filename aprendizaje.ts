@@ -388,3 +388,32 @@ function jugar1(personaje: Personaje1) {
     return;
   }
 }
+
+//Type Never
+
+function tipoNever(x: string | number) {
+  if (typeof x === "string") {
+    x.toUpperCase();
+  } else if (typeof x === "number") {
+    x.toFixed(2);
+  } else {
+    x; //acá dice que es never porque si arriba definimos que los tipos solo pueden ser string y number, entonces la función no llegaría hasta aquí
+  }
+}
+//Interface y clases
+
+interface Avenger {
+  name: string;
+  powerscore: number;
+  wonbattles: number;
+  age: number;
+}
+
+//acá tengo que poner lo que está definido en la interface
+class Avenger implements Avenger {
+  constructor(name: string, powerscore: number) {
+    this.name = name;
+    this.powerscore = powerscore;
+    this.sas;
+  }
+}

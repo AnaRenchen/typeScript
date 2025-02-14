@@ -48,3 +48,5 @@ Enuns: para colección de datos finita, como, por ejemplo, enumerar los días de
 Qué es mejor usar, tipo o interface? Eso depende.
 Con las interfaces siempre estás hablando de un objeto, por lo que no se puede usar la interface para crear un tipo primitivo como los colores.
 Aun así, si hay que elegir, es mejor utilizar tipos. Pero si lo que se va a utilizar son clases o objetos, en determinadas situaciones es preferible usar interface.
+
+//si pongo todas las definiciones en un mismo archivo, por ejemplo, todos los tipos, se suele poner el nombre del archivo como types.d.ts. Después se importan los tipos donde los usás
